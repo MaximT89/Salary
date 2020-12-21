@@ -1,12 +1,12 @@
 package com.tolstobrov.salary.activities;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.widget.TextView;
 
 import com.tolstobrov.salary.R;
+import com.tolstobrov.salary.utils.CurrentDate;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -15,8 +15,7 @@ import static com.tolstobrov.salary.R.id.text;
 
 public class MainActivity extends AppCompatActivity {
 
-
-    @Nullable@BindView(value = text) TextView mTextView;
+    @BindView(value = text) TextView mTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,7 +23,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-
-
+        mTextView.setText(CurrentDate.getCurrentTimeStamp());
     }
 }
