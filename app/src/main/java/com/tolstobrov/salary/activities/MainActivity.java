@@ -14,7 +14,11 @@ import android.widget.Toast;
 import com.tolstobrov.salary.R;
 import com.tolstobrov.salary.data.AppDatabase;
 import com.tolstobrov.salary.data.SalaryRecord;
+import com.tolstobrov.salary.di.App;
+import com.tolstobrov.salary.services.NetworkService;
 import com.tolstobrov.salary.utils.CurrentDate;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,20 +38,28 @@ import static com.tolstobrov.salary.R.id.text;
 
 public class MainActivity extends AppCompatActivity {
 
-    @BindView(value = text) View mTextView;
+    @BindView(value = text) TextView mTextView;
     @BindView(value = editSalarySize) EditText mEditSalarySize;
     @BindView(value = editIdForDelete) EditText mEditIdForDelete;
 
     AppDatabase db;
 
+    @Inject
+    NetworkService networkService;
+
     @SuppressLint("CheckResult")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ((App)getApplication()).getAppComponent().inject(this);
         setContentView(R.layout.activity_main);
+
         ButterKnife.bind(this);
 
-        db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "salary").build();
+        mTextView.setText(networkService.getHello());
+
+        db = Room.databaseBuilder(getApplicationContext(),
+                AppDatabase.class, "salary").build();
     }
 
     @SuppressLint("NonConstantResourceId")

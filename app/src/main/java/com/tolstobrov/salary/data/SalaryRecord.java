@@ -19,7 +19,6 @@ public class SalaryRecord {
     @ColumnInfo(name = "reason")
     public String reason;
 
-
     public long getId() {
         return id;
     }
