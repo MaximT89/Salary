@@ -2,8 +2,10 @@ package com.tolstobrov.salary.di.modules;
 
 import android.content.Context;
 
-import com.tolstobrov.salary.services.NetworkService;
-import com.tolstobrov.salary.services.impl.NetworkServiceImpl;
+import androidx.room.Room;
+
+import com.tolstobrov.salary.database.AppDatabase;
+import com.tolstobrov.salary.database.SalaryDao;
 
 import javax.inject.Singleton;
 
@@ -13,7 +15,7 @@ import dagger.Provides;
 @Module
 public class AppModule {
 
-    private Context context;
+    private final Context context;
 
     public AppModule(Context context) {
         this.context = context;
@@ -23,5 +25,17 @@ public class AppModule {
     @Singleton
     Context provideContext() {
         return this.context;
+    }
+
+    @Provides
+    @Singleton
+    public AppDatabase provideAppDatabase(Context context){
+        return Room.databaseBuilder(context, AppDatabase.class, "salary").build();
+    }
+
+    @Provides
+    @Singleton
+    public SalaryDao provideSalaryDao(AppDatabase appDatabase){
+        return appDatabase.getSalaryDao();
     }
 }

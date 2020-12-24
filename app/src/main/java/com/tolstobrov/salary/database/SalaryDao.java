@@ -1,4 +1,4 @@
-package com.tolstobrov.salary.data;
+package com.tolstobrov.salary.database;
 
 import androidx.room.Dao;
 import androidx.room.Delete;
@@ -7,10 +7,9 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 import androidx.room.Update;
 
-import java.util.List;
+import com.tolstobrov.salary.entity.SalaryRecord;
 
-import io.reactivex.Flowable;
-import io.reactivex.Single;
+import java.util.List;
 
 @Dao
 public interface SalaryDao {

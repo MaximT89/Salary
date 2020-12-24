@@ -1,4 +1,4 @@
-package com.tolstobrov.salary.data;
+package com.tolstobrov.salary.entity;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;

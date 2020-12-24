@@ -1,21 +1,17 @@
-package com.tolstobrov.salary.activities;
+package com.tolstobrov.salary.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.room.Room;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.tolstobrov.salary.R;
-import com.tolstobrov.salary.data.AppDatabase;
-import com.tolstobrov.salary.data.SalaryRecord;
-import com.tolstobrov.salary.di.App;
-import com.tolstobrov.salary.services.NetworkService;
+import com.tolstobrov.salary.database.SalaryDao;
+import com.tolstobrov.salary.entity.SalaryRecord;
+import com.tolstobrov.salary.App;
 import com.tolstobrov.salary.utils.CurrentDate;
 
 import javax.inject.Inject;
@@ -42,27 +38,19 @@ public class MainActivity extends AppCompatActivity {
     @BindView(value = editSalarySize) EditText mEditSalarySize;
     @BindView(value = editIdForDelete) EditText mEditIdForDelete;
 
-    AppDatabase db;
-
     @Inject
-    NetworkService networkService;
+    SalaryDao salaryDao;
 
     @SuppressLint("CheckResult")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ((App)getApplication()).getAppComponent().inject(this);
+        App.app().getAppComponent().inject(this);
         setContentView(R.layout.activity_main);
-
         ButterKnife.bind(this);
-
-        mTextView.setText(networkService.getHello());
-
-        db = Room.databaseBuilder(getApplicationContext(),
-                AppDatabase.class, "salary").build();
     }
 
-    @SuppressLint("NonConstantResourceId")
+    @SuppressLint({"NonConstantResourceId", "CheckResult"})
     @OnClick(value = btnSaveRecord)
     void onSaveClick() {
         SalaryRecord salaryRecord = new SalaryRecord();
@@ -71,23 +59,14 @@ public class MainActivity extends AppCompatActivity {
         salaryRecord.reason = "Зарплата";
         salaryRecord.sizeSalary = Integer.parseInt(mEditSalarySize.getText().toString());
 
-        Completable.fromAction(() -> db.getSalaryDao().insert(salaryRecord))
+        Completable.fromAction(() -> salaryDao.insert(salaryRecord))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new DisposableCompletableObserver() {
-                    @Override
-                    public void onComplete() {
-                        makeText(getApplicationContext(), "Запись добавлена", Toast.LENGTH_LONG).show();
-                    }
-
-                    @Override
-                    public void onError(@NonNull Throwable e) {
-                        makeText(getApplicationContext(), "Ошибка", Toast.LENGTH_LONG).show();
-                    }
-                });
+                .subscribe(() -> makeText(getApplicationContext(), "Запись добавлена", Toast.LENGTH_LONG).show(),
+                        throwable -> makeText(getApplicationContext(), "Ошибка", Toast.LENGTH_LONG).show());
     }
 
-    @SuppressLint("NonConstantResourceId")
+    @SuppressLint({"NonConstantResourceId", "CheckResult"})
     @OnClick(value = btnDeleteById)
     void onClickDeleteById() {
         long id = Long.parseLong(mEditIdForDelete.getText().toString());
@@ -95,19 +74,10 @@ public class MainActivity extends AppCompatActivity {
         SalaryRecord salaryRecord = new SalaryRecord();
         salaryRecord.id = id;
 
-        Completable.fromAction(() -> db.getSalaryDao().delete(salaryRecord))
+        Completable.fromAction(() -> salaryDao.delete(salaryRecord))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new DisposableCompletableObserver() {
-                    @Override
-                    public void onComplete() {
-                        makeText(getApplicationContext(), "Запись удалена", Toast.LENGTH_LONG).show();
-                    }
-
-                    @Override
-                    public void onError(@NonNull Throwable e) {
-                        makeText(getApplicationContext(), "Ошибка", Toast.LENGTH_LONG).show();
-                    }
-                });
+                .subscribe(() -> makeText(getApplicationContext(), "Запись удалена", Toast.LENGTH_LONG).show(),
+                        throwable -> makeText(getApplicationContext(), "Ошибка", Toast.LENGTH_LONG).show());
     }
 }
