@@ -1,4 +1,4 @@
-package com.tolstobrov.salary.ui;
+package com.tolstobrov.salary.ui.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -21,8 +21,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.Completable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.annotations.NonNull;
-import io.reactivex.observers.DisposableCompletableObserver;
 import io.reactivex.schedulers.Schedulers;
 
 import static android.widget.Toast.makeText;
@@ -34,9 +32,12 @@ import static com.tolstobrov.salary.R.id.text;
 
 public class MainActivity extends AppCompatActivity {
 
-    @BindView(value = text) TextView mTextView;
-    @BindView(value = editSalarySize) EditText mEditSalarySize;
-    @BindView(value = editIdForDelete) EditText mEditIdForDelete;
+    @BindView(value = text)
+    TextView mTextView;
+    @BindView(value = editSalarySize)
+    EditText mEditSalarySize;
+    @BindView(value = editIdForDelete)
+    EditText mEditIdForDelete;
 
     @Inject
     SalaryDao salaryDao;

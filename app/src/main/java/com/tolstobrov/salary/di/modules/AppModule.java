@@ -29,13 +29,13 @@ public class AppModule {
 
     @Provides
     @Singleton
-    public AppDatabase provideAppDatabase(Context context){
+    public AppDatabase provideAppDatabase(Context context) {
         return Room.databaseBuilder(context, AppDatabase.class, "salary").build();
     }
 
     @Provides
     @Singleton
-    public SalaryDao provideSalaryDao(AppDatabase appDatabase){
+    public SalaryDao provideSalaryDao(AppDatabase appDatabase) {
         return appDatabase.getSalaryDao();
     }
 }

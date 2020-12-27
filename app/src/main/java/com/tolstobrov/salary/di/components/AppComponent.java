@@ -1,6 +1,6 @@
 package com.tolstobrov.salary.di.components;
 
-import com.tolstobrov.salary.ui.MainActivity;
+import com.tolstobrov.salary.ui.activities.MainActivity;
 import com.tolstobrov.salary.di.modules.AppModule;
 
 import javax.inject.Singleton;
